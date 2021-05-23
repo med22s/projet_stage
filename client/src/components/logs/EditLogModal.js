@@ -4,48 +4,58 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import M from 'materialize-css/dist/js/materialize.min.js';
 import { updateLog } from '../../actions/logActions';
+import { clearCurrent } from '../../actions/logActions';
 import { findTech } from '../../actions/techActions';
+import { clearTech } from '../../actions/techActions';
 
-const EditLogModal = ({ current, updateLog,findTech,loading,searchedTech }) => {
+const EditLogModal = ({ current, updateLog,findTech,loading,tech,clearTech,clearCurrent }) => {
   const [message, setMessage] = useState('');
   const [attention, setAttention] = useState(false);
-  const [tech, setTech] = useState('');
+  const [techS, setTechS] = useState('');
+
+  let user={}
 
   useEffect(() => {
+
+    user=JSON.parse(localStorage.getItem('user'))
     if (current) {
       setMessage(current.message);
       setAttention(current.attention);
-      setTech(current.tech);
+      setTechS(current.tech._id);
     }
-  }, [current]);
 
-  const onSubmit = () => {
-    if (message === '' || tech === '') {
-      M.toast({ html: 'Please enter a message and select a tech' });
-    } else {
 
-        findTech(tech)
+    if(tech!==null && !loading && current!==null){
+      
+      const updatedLog = {
+        id: current._id,
+        message,
+        attention,
+        tech
+      };
 
-        if(!loading){
-            const updatedLog = {
-                id: current._id,
-                message,
-                attention,
-                searchedTech
-              };
-        
-              updateLog(updatedLog);
-              M.toast({ html: `Log updated by ${searchedTech.firstname} ${searchedTech.lastname}` });
-        
-              // Clear Fields
-              setMessage('');
-              setTech('');
-              setAttention(false);
-        }
+      updateLog(updatedLog);
+      tech && M.toast({ html: `Log updated by ${tech.firstname} ${tech.lastname}` });
 
+      clearTech()
+      clearCurrent()
       
     }
+
+    // eslint-disable-next-line
+  }, [current,tech]);
+
+  const onSubmit = () => {
+    if (message === '' || techS === '') {
+      M.toast({ html: 'Please enter a message and select a tech' });
+    } else {
+      findTech(techS)
+    }
   };
+
+  // const updateTechState=(e)=>{
+  //   setTech({...tech,[e.target.name]:e.target.value})
+  // }
 
   return (
     <div id='edit-log-modal' className='modal' style={modalStyle}>
@@ -62,21 +72,29 @@ const EditLogModal = ({ current, updateLog,findTech,loading,searchedTech }) => {
           </div>
         </div>
 
-        <div className='row'>
-          <div className='input-field'>
-            <select
-              name='tech'
-              value={tech}
-              className='browser-default'
-              onChange={e => setTech(e.target.value)}
-            >
-              <option value='' disabled>
-                Select Technician
-              </option>
-              <TechSelectOptions />
-            </select>
-          </div>
-        </div>
+
+        {
+          user.isAdmin &&
+          (
+
+            <div className='row'>
+              <div className='input-field'>
+                <select
+                  name='tech'
+                  value={techS}
+                  className='browser-default'
+                  onChange={e=>setTechS(e.target.value)}
+                >
+                  <option value='' disabled>
+                    Select Technician
+                  </option>
+                  <TechSelectOptions />
+                </select>
+              </div>
+            </div>
+          )
+        }
+
 
         <div className='row'>
           <div className='input-field'>
@@ -116,18 +134,21 @@ const modalStyle = {
 EditLogModal.propTypes = {
   current: PropTypes.object,
   updateLog: PropTypes.func.isRequired,
+  clearCurrent: PropTypes.func.isRequired,
+  clearTech: PropTypes.func.isRequired,
   findtech:PropTypes.func,
   loading:PropTypes.bool.isRequired,
-  searchedTech:PropTypes.object
+  tech:PropTypes.object
 };
 
 const mapStateToProps = state => ({
   current: state.log.current,
   loading:state.tech.loading,
-  searchedTech:state.tech.tech
+  tech:state.tech.tech,
+  user:state.auth.user
 });
 
 export default connect(
   mapStateToProps,
-  { updateLog,findTech }
+  { updateLog,findTech,clearTech,clearCurrent }
 )(EditLogModal);

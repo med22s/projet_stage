@@ -1,6 +1,15 @@
-import {REGISTER_SUCCESS,SET_LOADING,REGISTER_FAIL,USER_LOADED,AUTH_ERROR,LOGIN_SUCCESS,LOGIN_FAIL} from './types'
+import {REGISTER_SUCCESS,SET_LOADING,REGISTER_FAIL,USER_LOADED,AUTH_ERROR,LOGIN_SUCCESS,LOGIN_FAIL,LOGOUT} from './types'
 import axios from 'axios'
 import setAuthToken from '../utils/SetAuthToken'
+
+
+
+
+export const logout = () => {
+    return {
+      type: LOGOUT
+    };
+  };
 
 
 
@@ -16,8 +25,6 @@ export const loadTech=()=>async dispatch=>{
     if(localStorage.token){
         setAuthToken(localStorage.token);
     }
-    
-
     try {
         setLoading()
         const response=await axios.get('/api/auth')
@@ -65,15 +72,12 @@ export const logTech=(tech)=> async dispatch=>{
 
     
     try {
-
-
         const config={
             headers:{
                 'Content-Type':'application/json'
             }
         }
-
-
+        
         setLoading()
         const response=await axios.post('/api/auth',tech,config)
         dispatch({

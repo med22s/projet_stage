@@ -3,12 +3,14 @@ import {logTech} from '../../actions/authActions'
 import M from 'materialize-css/dist/js/materialize.min.js';
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types';
+import Nav from '../layout/Nav'
+import {loadTech} from '../../actions/authActions'
 
 
 const Login = (props) => {
 
 
-    const {logTech,loading,isAuthenticated,error}=props
+    const {logTech,loading,isAuthenticated,error,loadTech}=props
 
     const [email,setEmail]=useState('')
     const [password,setPassword]=useState('')
@@ -16,6 +18,7 @@ const Login = (props) => {
 
     useEffect(() => {
         if(!loading && isAuthenticated){
+
             props.history.push('/')
         }
 
@@ -25,24 +28,27 @@ const Login = (props) => {
     }, [error,isAuthenticated,props.history,loading])
 
 
-    const onSubmit=(e)=>{
+    const onSubmit=async (e)=>{
         e.preventDefault();
 
         if(email==='' || password===''){
             M.toast({ html: 'Email and Password must be valid !' });
         }else{
-            logTech({email,password});
+            await logTech({email,password});
+            await loadTech()
         }
 
     }
 
     return (
-
+        <div>
+            <Nav/>
+        
         <div className='form-container modal-content' style={{boxShadow:'2px 2px 2px 1px rgba(0, 0, 0, 0.2)'}}>
 
-        <h1>
-            Account <span className='lightblue-text'>Login</span>
-        </h1>
+        <h2>
+            Account <span className='login'>Login</span>
+        </h2>
         <div className="row">
             <form className="col s12" onSubmit={onSubmit}>
 
@@ -63,11 +69,12 @@ const Login = (props) => {
                 </div>
 
                 <div className="row">
-                    <button className="btn waves-effect waves-light" type="submit" name="action">Submit
+                    <button className="btn waves-effect waves-light bg-success" type="submit" name="action">Submit
                         <i className="material-icons right">send</i>
                     </button>
                 </div>
             </form>
+        </div>
         </div>
         </div>
     )
@@ -88,4 +95,4 @@ const mapStateToProps=state=>({
     
 })
 
-export default connect(mapStateToProps,{logTech})(Login)
+export default connect(mapStateToProps,{logTech,loadTech})(Login)

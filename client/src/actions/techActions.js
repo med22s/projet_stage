@@ -3,7 +3,8 @@ import {
     TECHS_ERROR,
     DELETE_TECH,
     SET_LOADING,
-    GET_TECHS
+    GET_TECHS,
+    CLEAR_TECH
   } from './types';
 
 import axios from 'axios'
@@ -34,6 +35,15 @@ export const findTech=(id)=>async dispatch=>{
 }
 
 
+export const clearTech=()=>{
+  return {
+    type:CLEAR_TECH
+  }
+}
+
+
+
+
   
 
   export const getTechs = () => async dispatch => {
@@ -41,6 +51,7 @@ export const findTech=(id)=>async dispatch=>{
       setLoading();
   
       const response = await axios.get('/api/techs');
+      
       
       dispatch({
         type: GET_TECHS,
@@ -66,6 +77,7 @@ export const findTech=(id)=>async dispatch=>{
         type: DELETE_TECH,
         payload: id
       });
+      
     } catch (err) {
       dispatch({
         type: TECHS_ERROR,

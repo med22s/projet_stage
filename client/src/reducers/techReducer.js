@@ -4,7 +4,8 @@ import {
     DELETE_TECH,
     SET_LOADING,
     TECHS_ERROR,
-    FIND_TECH
+    FIND_TECH,
+    CLEAR_TECH
   } from '../actions/types';
   
   const initialState = {
@@ -22,6 +23,10 @@ const TechReducer= (state = initialState, action) => {
           techs: action.payload,
           loading: false
         };
+      case CLEAR_TECH:
+        return {
+          ...state,tech:null
+        }
       case ADD_TECH:
         return {
           ...state,
@@ -31,7 +36,7 @@ const TechReducer= (state = initialState, action) => {
       case DELETE_TECH:
         return {
           ...state,
-          techs: state.techs.filter(tech => tech.id !== action.payload),
+          techs: state.techs.filter(tech => tech._id !== action.payload),
           loading: false
         };
       case FIND_TECH:

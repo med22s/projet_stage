@@ -4,17 +4,15 @@ import Logs from '../logs/Logs';
 import AddBtn from '../layout/AddBtn';
 import AddLogModal from '../logs/AddLogModal';
 import EditLogModal from '../logs/EditLogModal';
+import TechListModal from '../techs/TechListModal'
 import {loadTech} from '../../actions/authActions'
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types';
 
-const Home = ({loadTech}) => {
+const Home = ({loadTech,user}) => {
 
 
-    // useEffect(() => {
-    //     loadTech()
-    //     // eslint-disable-next-line
-    // }, [])
+    
 
     return (
         <>
@@ -23,6 +21,7 @@ const Home = ({loadTech}) => {
           <AddBtn />
           <AddLogModal />
           <EditLogModal />
+          <TechListModal />
           <Logs />
         </div>
         </>
@@ -34,4 +33,9 @@ Home.propTypes={
     loadTech:PropTypes.func.isRequired
 }
 
-export default connect(null,{loadTech})(Home)
+
+const mapStateToProps=state=>({
+    user:state.auth.user
+})
+
+export default connect(mapStateToProps,{loadTech})(Home)

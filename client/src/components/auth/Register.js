@@ -1,8 +1,9 @@
 import React,{useState,useEffect} from 'react'
 import {connect} from 'react-redux'
-import {registerTech} from '../../actions/authActions'
+import {loadTech, registerTech} from '../../actions/authActions'
 import PropTypes from 'prop-types';
 import M from 'materialize-css/dist/js/materialize.min.js';
+import Nav from '../layout/Nav'
 
 
 const Register = (props) => {
@@ -14,7 +15,7 @@ const Register = (props) => {
     })
 
 
-    const {registerTech,loading,isAuthenticated,error}=props
+    const {registerTech,loading,isAuthenticated,error,loadTech}=props
 
     useEffect(() => {
         
@@ -38,16 +39,18 @@ const Register = (props) => {
     }
 
     const onSubmit=(e)=>{
-        e.preventDefault()
+        e.preventDefault();
         registerTech(tech)
-
-
-
+        loadTech()
     }
 
     return (
+        <div>
+
+        <Nav/>
+        
     <div className='form-container' style={{boxShadow:'2px 2px 2px 1px rgba(0, 0, 0, 0.2)'}}>
-        <h1 className='center '>Registration</h1>
+        <h2 className='center login '>Registration</h2>
 
         <div className="row">
             <form className="col s12" onSubmit={onSubmit}>
@@ -78,7 +81,7 @@ const Register = (props) => {
 
 
                 <div className="row">
-                    <button className="btn waves-effect waves-light" type="submit" name="action">Submit
+                    <button className="btn waves-effect waves-light bg-success" type="submit" name="action">Submit
                         <i className="material-icons right">send</i>
                     </button>
                 </div>
@@ -86,11 +89,13 @@ const Register = (props) => {
             </form>
         </div>
     </div>
+    </div>
     )
 }
 
 Register.propTypes={
     registerTech:PropTypes.func.isRequired,
+    loadTech:PropTypes.func.isRequired,
     isAuthenticated:PropTypes.bool.isRequired,
     loading:PropTypes.bool.isRequired,
     error:PropTypes.object.isRequired
@@ -105,4 +110,4 @@ const mapStateToProps=state=>({
 })
 
 
-export default connect(mapStateToProps,{registerTech})(Register)
+export default connect(mapStateToProps,{registerTech,loadTech})(Register)

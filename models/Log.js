@@ -7,6 +7,7 @@ const logSchema=mongoose.Schema({
     message:{type:String,required:true},
     attention: {type:Boolean,required:true},
     tech: {type:techSchema,required:true},
+    techid: {type:mongoose.Schema.Types.ObjectId,ref:'technician',default:function(){return this.tech._id}},
     date: {type:Date,default:Date.now}
 })
 

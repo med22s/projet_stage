@@ -5,10 +5,18 @@ import PropTypes from 'prop-types';
 import { deleteLog, setCurrent } from '../../actions/logActions';
 
 import M from 'materialize-css/dist/js/materialize.min.js';
+import { useEffect } from 'react';
 
 const LogItem = ({ log, deleteLog, setCurrent }) => {
+
+let user={}
+
+  useEffect(()=>{
+    user=JSON.parse(localStorage.getItem('user'))
+  },[])
+
   const onDelete = () => {
-    deleteLog(log.id);
+    deleteLog(log._id);
     M.toast({ html: 'Log Deleted' });
   };
 
@@ -26,13 +34,13 @@ const LogItem = ({ log, deleteLog, setCurrent }) => {
         </a>
         <br />
         <span className='grey-text'>
-          <span className='black-text'>ID #{log.id}</span> last updated by{' '}
-          <span className='black-text'>{log.tech}</span> on{' '}
+          <span className='black-text'>ID #{log._id}</span> last updated by{' '}
+          <span className='black-text'>{log.tech.firstname}</span> on{' '}
           <Moment format='MMMM Do YYYY, h:mm:ss a'>{log.date}</Moment>
         </span>
-        <a href='#!' onClick={onDelete} className='secondary-content'>
+        { user.isAdmin && (<a href='#!' onClick={onDelete} className='secondary-content'>
           <i className='material-icons grey-text'>delete</i>
-        </a>
+        </a>)} 
       </div>
     </li>
   );
@@ -44,7 +52,12 @@ LogItem.propTypes = {
   setCurrent: PropTypes.func.isRequired
 };
 
+
+const mapStateToProps=state=>({
+  user:state.auth.user
+})
+
 export default connect(
-  null,
+  mapStateToProps,
   { deleteLog, setCurrent }
 )(LogItem);

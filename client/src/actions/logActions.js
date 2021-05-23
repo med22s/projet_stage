@@ -7,7 +7,8 @@ import {
     UPDATE_LOG,
     SEARCH_LOGS,
     SET_CURRENT,
-    CLEAR_CURRENT
+    CLEAR_CURRENT,
+    CLEAR_FILTER
   } from './types';
 
 import axios from 'axios'
@@ -26,7 +27,7 @@ import axios from 'axios'
     } catch (err) {
       dispatch({
         type: LOGS_ERROR,
-        payload: err.response.data.msg
+         payload: err.response.data.msg
       });
     }
   };
@@ -54,7 +55,7 @@ import axios from 'axios'
       dispatch({
         type: LOGS_ERROR,
         payload: err.response.data.msg
-      });
+      }); 
     }
   };
   
@@ -89,7 +90,7 @@ import axios from 'axios'
   
       const response = await axios.put(`/api/logs/${log.id}`,log,config);
   
-     
+     console.log(response.data);
   
       dispatch({
         type: UPDATE_LOG,
@@ -103,12 +104,20 @@ import axios from 'axios'
     }
   };
   
-  export const searchLogs = text => async dispatch => {
+  export const searchLogs = text =>{
 
-    dispatch({
+    return {
       type: SEARCH_LOGS,
       payload: text
-    });
+    };
+    
+  };
+
+  export const clearFilter = () =>{
+
+    return {
+      type: CLEAR_FILTER
+    };
     
   };
 

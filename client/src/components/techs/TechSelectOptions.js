@@ -11,8 +11,9 @@ const TechSelectOptions = ({getTechs,tech: { techs, loading }}) => {
         if(techs===null){ 
         if(localStorage.getItem('token')){
             setAuthToken(localStorage.token);
-            console.log('token set')
+            
             getTechs()
+            console.log(techs)
           }
         }
         // eslint-disable-next-line

@@ -18,7 +18,7 @@ router.get('/', auth, async (req, res) => {
       });
       return res.json(logs);
     }else{
-      const logs = await Log.find({tech: req.tech.id}).sort({
+      const logs = await Log.find({techid:req.tech.id}).sort({
         date: -1,
       });
       return res.json(logs);
@@ -82,7 +82,7 @@ router.put('/:id', auth, async (req, res) => {
   // Build log object
   const logFields = {};
   if (message) logFields.message = message;
-  if (attention) logFields.attention = attention;
+  logFields.attention = attention;
   if(tech) logFields.tech=tech;
   logFields.date = Date.now();
 
@@ -104,7 +104,7 @@ router.put('/:id', auth, async (req, res) => {
     log = await Log.findByIdAndUpdate(
       req.params.id,
       {$set: logFields},
-      {new: true},
+      {new: true}
     );
 
     return res.json(log);

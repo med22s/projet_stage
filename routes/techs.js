@@ -94,7 +94,7 @@ router.delete('/:id', [auth,admin], async (req, res) => {
 
     new fawn.Task()
     .remove('technicians',{_id:tech._id})
-    .remove('logs',{tech:tech._id})
+    .remove('logs',{tech:tech})
     .run()
 
 
@@ -109,10 +109,16 @@ router.delete('/:id', [auth,admin], async (req, res) => {
 // @route     GET api/techs
 // @desc      Get all technicians
 // @access    Private
-router.get('/', [auth,admin], async (req, res) => {
+router.get('/', [auth], async (req, res) => {
   try {
-    const techs = await Technician.find({_id:{$ne: req.tech.id}});
+    if(req.tech.isAdmin){
+      const techs = await Technician.find({_id:{$ne: req.tech.id}});
+      return res.json(techs);
+    }else{
+      const techs = await Technician.find({isAdmin:{ $ne: true }});
     return res.json(techs);
+    }
+    
   } catch (err) {
     console.error(err.message+'get all techs');
     res.status(500).json({msg:'Server Error'});
@@ -123,7 +129,7 @@ router.get('/', [auth,admin], async (req, res) => {
 // @route     GET api/techs/:id
 // @desc      Get a specific tech
 // @access    Private
-router.get('/:id', [auth,admin], async (req, res) => {
+router.get('/:id', [auth], async (req, res) => {
   try {
     const tech = await Technician.findById(req.params.id)
     if(!tech) res.status(404).json({msg:'tech was not found !'})

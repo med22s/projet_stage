@@ -20,3 +20,5 @@ export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAIL = 'LOGIN_FAIL';
 export const LOGOUT = 'LOGOUT';
 export const FIND_TECH = 'FIND_TECH';
+export const CLEAR_TECH = 'CLEAR_TECH';
+export const CLEAR_FILTER = 'CLEAR_FILTER';

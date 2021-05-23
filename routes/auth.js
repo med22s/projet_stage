@@ -14,6 +14,7 @@ const {Technician} = require('../models/Technician');
 router.get('/', auth, async (req, res) => {
   try {
     const tech = await Technician.findById(req.tech.id).select('-password');
+    console.log(tech);
     return res.json(tech);
   } catch (err) {
     console.error(err.message);

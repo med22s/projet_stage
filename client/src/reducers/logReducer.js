@@ -7,7 +7,8 @@ import {
     UPDATE_LOG,
     SEARCH_LOGS,
     SET_CURRENT,
-    CLEAR_CURRENT
+    CLEAR_CURRENT,
+    CLEAR_FILTER
   } from '../actions/types';
   
   const initialState = {
@@ -21,6 +22,7 @@ import {
 const LogReducer= (state = initialState, action) => {
     switch (action.type) {
       case GET_LOGS:
+        
         return {
           ...state,
           logs: action.payload,
@@ -35,22 +37,22 @@ const LogReducer= (state = initialState, action) => {
       case DELETE_LOG:
         return {
           ...state,
-          logs: state.logs.filter(log => log.id !== action.payload),
+          logs: state.logs.filter(log => log._id !== action.payload),
           loading: false
         };
       case UPDATE_LOG:
         return {
           ...state,
           logs: state.logs.map(log =>
-            log.id === action.payload.id ? action.payload : log
+            log._id === action.payload._id ? action.payload : log
           )
         };
       case SEARCH_LOGS:
         return {
           ...state,
-          filtered: state.logs.map(log=>{
-            const regex=new RegExp(`${action.payload}`, 'gi')
-            return log.message.match(regex) || log.tech.firstname.match(regex) || log.tech.lastname.match(regex)
+          filtered: state.logs.filter(log=>{
+            // const regex=new RegExp(`${action.payload}`, 'gi')
+            return log.message.includes(action.payload)|| log.tech.firstname.includes(action.payload) || log.tech.lastname.includes(action.payload)
           })
         };
       case SET_CURRENT:
@@ -63,6 +65,8 @@ const LogReducer= (state = initialState, action) => {
           ...state,
           current: null
         };
+      case CLEAR_FILTER:
+        return {...state,filtered:null}
       case SET_LOADING:
         return {
           ...state,
