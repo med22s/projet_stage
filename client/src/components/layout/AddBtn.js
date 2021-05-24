@@ -1,16 +1,18 @@
-import React,{useEffect} from 'react';
+import React,{useEffect,useState} from 'react';
 import {connect} from 'react-redux'
 import {logout} from '../../actions/authActions'
 
-const AddBtn = ({logout}) => {
+const AddBtn = ({logout,user}) => {
 
-  let user={};
+  // const [user,setUser]=useState({
+  //   _id:'',firstname:'',lastname:'',email:''
+  // })
 
-  useEffect(()=>{
-    user=JSON.parse(localStorage.getItem('user'))
-    console.log(user)
+  // useEffect(()=>{
+  //   setUser({...user,...JSON.parse(localStorage.getItem('user'))})
+  //   console.log(JSON.parse(localStorage.getItem('user')))
 
-  },[])
+  // },[])
 
   return (
     <div className='fixed-action-btn'>
@@ -22,8 +24,7 @@ const AddBtn = ({logout}) => {
     </a>
     <ul>
       {
-        
-        !user.isAdmin &&
+        user.isAdmin &&
         (
           <li>
               <a
@@ -35,12 +36,9 @@ const AddBtn = ({logout}) => {
             </li>
         )
       }
-
-
       <li>
         <a href="!#" onClick={(e) => {e.preventDefault(); logout() }} className="btn-floating indigo waves-effect waves-light"><i className="material-icons">fingerprint</i></a>
       </li>
-
     </ul>
   </div>
   );

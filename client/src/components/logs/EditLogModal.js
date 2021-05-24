@@ -8,16 +8,15 @@ import { clearCurrent } from '../../actions/logActions';
 import { findTech } from '../../actions/techActions';
 import { clearTech } from '../../actions/techActions';
 
-const EditLogModal = ({ current, updateLog,findTech,loading,tech,clearTech,clearCurrent }) => {
+const EditLogModal = ({ current, updateLog,findTech,loading,tech,clearTech,clearCurrent,user }) => {
   const [message, setMessage] = useState('');
   const [attention, setAttention] = useState(false);
   const [techS, setTechS] = useState('');
 
-  let user={}
+
 
   useEffect(() => {
 
-    user=JSON.parse(localStorage.getItem('user'))
     if (current) {
       setMessage(current.message);
       setAttention(current.attention);

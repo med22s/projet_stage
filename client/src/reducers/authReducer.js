@@ -4,7 +4,7 @@ const initialState={
     token:localStorage.getItem('token'),
     isAuthenticated:false,
     loading:false,
-    user:localStorage.getItem('user'),
+    user:JSON.parse(localStorage.getItem('user')),
     error:null
 }
 

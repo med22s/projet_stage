@@ -5,15 +5,14 @@ import PropTypes from 'prop-types';
 import { deleteLog, setCurrent } from '../../actions/logActions';
 
 import M from 'materialize-css/dist/js/materialize.min.js';
-import { useEffect } from 'react';
 
-const LogItem = ({ log, deleteLog, setCurrent }) => {
+const LogItem = ({ log, deleteLog, setCurrent,user }) => {
 
-let user={}
+// let user={}
 
-  useEffect(()=>{
-    user=JSON.parse(localStorage.getItem('user'))
-  },[])
+//   useEffect(()=>{
+//     user=JSON.parse(localStorage.getItem('user'))
+//   },[])
 
   const onDelete = () => {
     deleteLog(log._id);
